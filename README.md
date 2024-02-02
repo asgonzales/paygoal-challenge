@@ -17,10 +17,11 @@ Instalación y documentación del challenge de PayGoal para Jr Developer
 ```bash
     mvn spring-boot:run
 ```
+    Para optimizar las consultas se creó un archivo data.sql para incializar 7 productos.
 
 # Endpoints
 
-## Ruta inicial localhost:8080/api
+## Ruta inicial localhost:8080
 
 las respuestas tienen el siguiente formato
 si salió bien:
