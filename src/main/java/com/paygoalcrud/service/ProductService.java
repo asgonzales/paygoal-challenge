@@ -28,6 +28,16 @@ public class ProductService {
         });
         return mappedProducts;
     }
+    public List<ProductDTO> findAllOrderByPrice(String orderBy) {
+        List<Product> products;
+        if(orderBy.equals("asc"))products = repo.getAllOrderByPriceAsc();
+        else products = repo.getAllOrderByPriceDesc();
+        List<ProductDTO> mappedProducts = new ArrayList<>();
+        products.forEach(product -> {
+            mappedProducts.add(modelMapper.map(product, ProductDTO.class));
+        });
+        return mappedProducts;
+    }
     
     public ProductDTO findById(String id) throws APIException, Exception{
         if(id == null || id.isEmpty()) throw new APIException(HttpStatus.UNPROCESSABLE_ENTITY, "el id no puede estar vacío");
@@ -37,8 +47,18 @@ public class ProductService {
     }
     
     public List<ProductDTO> findByName(String name) throws APIException, Exception {
-        if(name.isEmpty()) throw new APIException(HttpStatus.UNPROCESSABLE_ENTITY, "El nombre no puede estar vacío");
         List<Product> products = repo.getByName(name);
+        if(products.isEmpty()) throw new APIException(HttpStatus.NOT_FOUND, "No se encontraron productos con ese nombre");
+        List<ProductDTO> mappedProducts = new ArrayList<>();
+        products.forEach(product -> {
+           mappedProducts.add(modelMapper.map(product, ProductDTO.class)); 
+        });
+        return mappedProducts;
+    }
+    public List<ProductDTO> findByNameOrderByPrice(String name, String orderBy) throws APIException, Exception {
+        List<Product> products;
+        if(orderBy.equals("asc")) products = repo.getByNameOrderByPriceAsc(name);
+        else products = repo.getByNameOrderByPriceDesc(name);
         if(products.isEmpty()) throw new APIException(HttpStatus.NOT_FOUND, "No se encontraron productos con ese nombre");
         List<ProductDTO> mappedProducts = new ArrayList<>();
         products.forEach(product -> {

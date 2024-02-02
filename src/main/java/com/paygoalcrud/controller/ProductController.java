@@ -29,14 +29,26 @@ public class ProductController {
     ProductService service;
     
     @GetMapping("")
-    public ResponseEntity getByName(@RequestParam Optional<String> name) {
-        String nameValue = name.orElse("");
+    public ResponseEntity getByName(@RequestParam Optional<String> name, @RequestParam Optional<String> orderByPrice) {
+        String nameValue = name.orElse("").toLowerCase();
+        String orderByPriceValue = orderByPrice.orElse("").toLowerCase();
+        System.out.println(orderByPriceValue);
         try {
-            if(name == null || nameValue.isEmpty()) {
-                List<ProductDTO> allProducts = service.findAll();
+            if(nameValue == null || nameValue.isEmpty()) {
+                List<ProductDTO> allProducts;
+                if(orderByPriceValue.equals("asc") || orderByPriceValue.equals("desc")) {
+                    allProducts = service.findAllOrderByPrice(orderByPriceValue);
+                } else {
+                    allProducts = service.findAll();
+                }
                 return ResponseHandler.success(HttpStatus.OK, allProducts);
             } else {
-                List<ProductDTO> products = service.findByName(nameValue);
+                List<ProductDTO> products;
+                if(orderByPriceValue.equals("asc") || orderByPriceValue.equals("desc")) {
+                    products = service.findByNameOrderByPrice(nameValue, orderByPriceValue);
+                } else {
+                    products = service.findByName(nameValue);
+                }
                 return ResponseHandler.success(HttpStatus.OK, products);
             }
         } catch (APIException ex) {
