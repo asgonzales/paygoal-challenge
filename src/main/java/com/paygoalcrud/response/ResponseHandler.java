@@ -16,13 +16,6 @@ public class ResponseHandler {
         response.put("data", data);
         return new ResponseEntity(response, httpStatus);
     }
-    public static ResponseEntity success (HttpStatus httpStatus, Object data, HttpHeaders headers) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("httpStatus", httpStatus);
-        response.put("data", data);
-        return new ResponseEntity(response, headers, httpStatus);
-    }
     
     public static ResponseEntity failed (HttpStatus httpStatus, Object data) {
         Map<String, Object> response = new HashMap<>();
